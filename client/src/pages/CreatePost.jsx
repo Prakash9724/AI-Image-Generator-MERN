@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { preview } from "../assets";
-import { getRandomPrompts } from "../utils";
+import { getRandomPrompt } from '../utils';
 import { FormField, Loader } from "../components";
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const CreatePost = () => {
   };
 
   const handleSurpriseMe = () => {
-    const randomPrompt = getRandomPrompts(form.prompt);
+    const randomPrompt = getRandomPrompt(form.prompt);
     setForm({ ...form, prompt: randomPrompt });
   };
 
