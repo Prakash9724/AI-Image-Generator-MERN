@@ -30,10 +30,16 @@ app.get("/", async (req, res) => {
 
 const startServer = async () => {
   try {
-    connectDB(process.env.MONGODB_URL);
-    app.listen(8080, () => console.log("Server has started"));
+    console.log('Connecting to MongoDB...');
+    await connectDB(process.env.MONGODB_URL);
+    
+    app.listen(8080, () => {
+      console.log("Server has started on port 8080");
+      console.log("MongoDB URL:", process.env.MONGODB_URL);
+    });
   } catch (error) {
-    console.log(error);
+    console.error('Failed to start server:', error);
+    process.exit(1);
   }
 };
 startServer();
