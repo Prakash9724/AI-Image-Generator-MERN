@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { preview } from "../assets";
 import { getRandomPrompts } from "../utils";
 import { FormField, Loader } from "../components";
-import ImageModal from '../components/ImageModal';
+import ImageModal from "../components/ImageModal";
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -13,15 +13,12 @@ const CreatePost = () => {
     photo: "",
   });
 
-
-  //https://ai-image-generator-oeoi.onrender.com/api/v1/post
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
-    console.log(e.target.name, e.target.value);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -32,33 +29,36 @@ const CreatePost = () => {
 
   const generateImage = async () => {
     if (!form.prompt) {
-      alert('Please enter a prompt');
+      alert("Please enter a prompt");
       return;
     }
 
     try {
       setGeneratingImg(true);
-      const response = await fetch('https://ai-image-generator-oeoi.onrender.com/api/v1/dalle', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt: form.prompt }),
-      });
+      const response = await fetch(
+        "https://ai-image-generator-oeoi.onrender.com/api/v1/dalle",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: form.prompt }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       if (!data.success) {
-        throw new Error(data.message || 'Failed to generate image');
+        throw new Error(data.message || "Failed to generate image");
       }
 
       setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
     } catch (error) {
-      alert(error.message || 'Something went wrong!');
+      alert(error.message || "Something went wrong!");
       console.error(error);
     } finally {
       setGeneratingImg(false);
@@ -71,24 +71,27 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch('https://ai-image-generator-oeoi.onrender.com/api/v1/post', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ ...form }),
-        });
+        const response = await fetch(
+          "https://ai-image-generator-oeoi.onrender.com/api/v1/post",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...form }),
+          }
+        );
 
         await response.json();
-        alert('Success');
-        navigate('/');
+        alert("Success");
+        navigate("/");
       } catch (err) {
         alert(err);
       } finally {
         setLoading(false);
       }
     } else {
-      alert('Please generate an image with proper details');
+      alert("Please generate an image with proper details");
     }
   };
 
@@ -124,7 +127,9 @@ const CreatePost = () => {
             handleSurpriseMe={handleSurpriseMe}
           />
 
-          <span className="text-sm opacity-70 pl-2">**It will take minute to generate high quality image**</span>
+          <span className="text-sm opacity-70 pl-2">
+            **It will take minute to generate high quality image**
+          </span>
           <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:[64vw] w-64  p-3 h-64 flex justify-center items-center">
             {form.photo ? (
               <img
@@ -149,7 +154,7 @@ const CreatePost = () => {
         </div>
 
         <div className="mt-5 flex gap-5">
-        <button
+          <button
             type="button"
             onClick={generateImage}
             className=" text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
