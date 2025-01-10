@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { preview } from "../assets";
-import { getRandomPrompt } from '../utils';
+import { getRandomPrompts } from "../utils";
 import { FormField, Loader } from "../components";
+import ImageModal from '../components/ImageModal';
+
 const CreatePost = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -11,8 +13,12 @@ const CreatePost = () => {
     photo: "",
   });
 
+
+  //https://ai-image-generator-oeoi.onrender.com/api/v1/post
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
     console.log(e.target.name, e.target.value);
@@ -20,7 +26,7 @@ const CreatePost = () => {
   };
 
   const handleSurpriseMe = () => {
-    const randomPrompt = getRandomPrompt(form.prompt);
+    const randomPrompt = getRandomPrompts(form.prompt);
     setForm({ ...form, prompt: randomPrompt });
   };
 
@@ -118,7 +124,8 @@ const CreatePost = () => {
             handleSurpriseMe={handleSurpriseMe}
           />
 
-          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
+          <span className="text-sm opacity-70 pl-2">**It will take minute to generate high quality image**</span>
+          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 sm:[64vw] w-64  p-3 h-64 flex justify-center items-center">
             {form.photo ? (
               <img
                 src={form.photo}
@@ -164,6 +171,26 @@ const CreatePost = () => {
           </button>
         </div>
       </form>
+
+      {form.photo && (
+        <div className="relative mt-2">
+          <img
+            src={form.photo}
+            alt={form.prompt}
+            className="w-full h-auto object-contain cursor-pointer"
+            onClick={() => {
+              setSelectedImage(form.photo);
+              setIsModalOpen(true);
+            }}
+          />
+        </div>
+      )}
+
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        imageUrl={selectedImage}
+      />
     </section>
   );
 };

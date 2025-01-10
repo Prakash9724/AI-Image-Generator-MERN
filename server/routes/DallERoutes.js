@@ -22,7 +22,7 @@ router.route('/').post(async (req, res) => {
         }
 
         const response = await fetch(
-            "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+            "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev",
             {
                 method: "POST",
                 headers: {
@@ -56,4 +56,4 @@ router.route('/').post(async (req, res) => {
     }
 });
 
-export default router;
+export default router; 

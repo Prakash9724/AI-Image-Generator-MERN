@@ -2,10 +2,10 @@ import React from 'react'
 import { download } from '../assets'
 import {downloadImage} from '../utils'
 
-const Card = ({_id,name,photo,prompt}) => {
+const Card = ({_id,name,photo,prompt, onClick}) => {
   return (
     <div className='rounded-xl  group relative shadow-card hover:shadow-cardhover card'>
-      <img className=' w-full h-auto object-cover rounded-xl' src={photo} alt={prompt} />
+      <img className=' w-full h-auto object-cover rounded-xl cursor-pointer' src={photo} alt={prompt} onClick={onClick} />
     
       <div className="group-hover:flex transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300 flex-col max-h-[94.5%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-4 rounded-md">
       <p className="text-white text-sm overflow-y-auto prompt">{prompt}</p>

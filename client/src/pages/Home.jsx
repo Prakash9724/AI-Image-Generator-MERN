@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Loader, Card, FormField } from "../components";
+import ImageModal from '../components/ImageModal';
 
-const RenderCards = ({ data, title }) => {
+const RenderCards = ({ data, title, onImageClick }) => {
   if (data?.length > 0) {
-    return data.map((post) => <Card key={post._id} {...post} />);
+    return data.map((post) => (
+      <Card 
+        key={post._id} 
+        {...post} 
+        onClick={() => onImageClick(post.photo)}
+      />
+    ));
   }
   return (
     <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">{title}</h2>
@@ -16,11 +23,13 @@ const Home = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedResult, setsearchedResult] = useState(null);
   const [searchTimeout, setsearchTimeout] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSearchChange = (e) => {
     clearTimeout(searchTimeout);
     setSearchText(e.target.value);
-
+//https://ai-image-generator-oeoi.onrender.com/api/v1/post
     setsearchTimeout(
       setTimeout(() => {
         const searchResult = allPost.filter(
@@ -57,6 +66,11 @@ const Home = () => {
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
 
   return (
     <section className="max-w-7xl mx-auto">
@@ -97,14 +111,28 @@ const Home = () => {
 
             <div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
               {searchText ? (
-                <RenderCards data={searchedResult} title="No search results found" />
+                <RenderCards 
+                  data={searchedResult} 
+                  title="No search results found" 
+                  onImageClick={handleImageClick}
+                />
               ) : (
-                <RenderCards data={allPost} title="no post found" />
+                <RenderCards 
+                  data={allPost} 
+                  title="no post found" 
+                  onImageClick={handleImageClick}
+                />
               )}
             </div>
           </>
         )}
       </div>
+
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        imageUrl={selectedImage}
+      />
     </section>
   );
 };
