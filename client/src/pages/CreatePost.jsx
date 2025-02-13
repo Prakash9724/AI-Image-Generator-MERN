@@ -36,7 +36,7 @@ const CreatePost = () => {
     try {
       setGeneratingImg(true);
       const response = await fetch(
-        "https://ai-image-generator-oeoi.onrender.com/api/v1/dalle",
+        "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-3.5-large/api/v1/dalle",
         {
           method: "POST",
           headers: {
