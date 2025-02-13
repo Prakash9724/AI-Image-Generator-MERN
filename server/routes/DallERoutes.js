@@ -22,7 +22,7 @@ router.route('/').post(async (req, res) => {
         }
 
         const response = await fetch(
-            "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-3.5-large",
+            "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev",
             {
                 method: "POST",
                 headers: {
