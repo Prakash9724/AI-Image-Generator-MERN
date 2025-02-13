@@ -46,7 +46,7 @@ const Home = () => {
     SetLoading(true);
 
     try {
-      const response = await fetch("https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-3.5-large/api/v1/post", {
+      const response = await fetch("https://ai-image-generator-oeoi.onrender.com/api/v1/post", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
