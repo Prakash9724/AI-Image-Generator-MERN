@@ -21,41 +21,25 @@ router.route('/').post(async (req, res) => {
             });
         }
 
-        console.log('Received prompt:', prompt); // Debug log
-
         const response = await fetch(
-            "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",  // Changed model
+            "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-dev",
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
                 },
-                body: JSON.stringify({ 
-                    inputs: prompt,
-                    parameters: {
-                        num_inference_steps: 30,
-                        guidance_scale: 7.5,
-                    },
-                    options: {
-                        wait_for_model: true,
-                        use_cache: false
-                    }
-                }),
+                body: JSON.stringify({ inputs: prompt }),
             }
         );
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('API Error:', errorText);
-            throw new Error(`API error: ${response.status} - ${errorText}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const imageBlob = await response.blob();
         const buffer = await imageBlob.arrayBuffer();
         const base64Image = Buffer.from(buffer).toString('base64');
-
-        console.log('Image generated successfully'); // Debug log
 
         res.status(200).json({ 
             success: true, 
@@ -63,12 +47,11 @@ router.route('/').post(async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Detailed Error:', error);
+        console.error('Image Generation Error:', error);
         res.status(500).json({ 
             success: false, 
             message: 'Failed to generate image',
-            error: error.message,
-            stack: error.stack
+            error: error.message
         });
     }
 });
