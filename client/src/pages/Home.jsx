@@ -29,7 +29,6 @@ const Home = () => {
   const handleSearchChange = (e) => {
     clearTimeout(searchTimeout);
     setSearchText(e.target.value);
-//https://ai-image-generator-oeoi.onrender.com/api/v1/post
     setsearchTimeout(
       setTimeout(() => {
         const searchResult = allPost.filter(
@@ -74,6 +73,7 @@ const Home = () => {
 
   return (
     <section className="max-w-7xl mx-auto">
+    
       <div>
         <h1 className="font-extrabold text-[#222328] text-[32px]">
           The Community Showcase
